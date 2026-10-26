@@ -1,7 +1,14 @@
-import type { Link } from "@/lib/mock-data";
+import type { Folder, Link } from "@/lib/mock-data";
 import DeleteLinkButton from "./delete-link-button";
+import EditLinkButton from "./edit-link-button";
 
-export default function LinkCard({ link }: { link: Link }) {
+export default function LinkCard({
+  link,
+  folders,
+}: {
+  link: Link;
+  folders: Folder[];
+}) {
   return (
     <div className="group/card relative">
       <a
@@ -30,6 +37,7 @@ export default function LinkCard({ link }: { link: Link }) {
           {link.url}
         </span>
       </a>
+      <EditLinkButton link={link} folders={folders} />
       <DeleteLinkButton linkId={link.id} linkTitle={link.title} />
     </div>
   );

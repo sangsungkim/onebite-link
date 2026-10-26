@@ -39,6 +39,25 @@ export async function createLink(formData: FormData) {
   redirect(`/folder/${folderId}`);
 }
 
+export async function updateLink(id: string, formData: FormData) {
+  const link = links.find((link) => link.id === id);
+  const title = String(formData.get("title") ?? "").trim();
+  const description = String(formData.get("description") ?? "").trim();
+  const folderId = String(formData.get("folderId") ?? "");
+  const nextFolder = folders.find((folder) => folder.id === folderId);
+  if (!link || !title || !nextFolder) return;
+
+  if (link.folderId !== folderId) {
+    const prevFolder = folders.find((folder) => folder.id === link.folderId);
+    if (prevFolder) prevFolder.count = Math.max(0, prevFolder.count - 1);
+    nextFolder.count += 1;
+    link.folderId = folderId;
+  }
+  link.title = title;
+  link.description = description;
+  revalidatePath("/", "layout");
+}
+
 export async function deleteLink(id: string) {
   const index = links.findIndex((link) => link.id === id);
   if (index === -1) return;
