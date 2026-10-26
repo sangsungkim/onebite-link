@@ -11,6 +11,17 @@ export async function createFolder(formData: FormData) {
   revalidatePath("/", "layout");
 }
 
+export async function updateFolder(id: string, formData: FormData) {
+  const name = String(formData.get("name") ?? "").trim();
+  if (!name) return;
+
+  const folder = folders.find((folder) => folder.id === id);
+  if (!folder) return;
+
+  folder.name = name;
+  revalidatePath("/", "layout");
+}
+
 export async function deleteFolder(id: string) {
   const index = folders.findIndex((folder) => folder.id === id);
   if (index === -1) return;

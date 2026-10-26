@@ -1,5 +1,6 @@
 import Link from "next/link";
 import DeleteFolderButton from "./delete-folder-button";
+import EditFolderButton from "./edit-folder-button";
 
 export default function SidebarItem({
   label,
@@ -15,7 +16,7 @@ export default function SidebarItem({
   folderId?: string;
 }) {
   return (
-    <div className="folder-row relative">
+    <div className="folder-row group/row relative">
       <Link
         href={href}
         className={`item-hover flex w-full items-center justify-between rounded-[6px] px-3 py-2 text-left text-sm text-[var(--text)] ${
@@ -28,7 +29,10 @@ export default function SidebarItem({
         </span>
       </Link>
       {folderId && (
-        <DeleteFolderButton folderId={folderId} folderName={label} />
+        <>
+          <EditFolderButton folderId={folderId} folderName={label} />
+          <DeleteFolderButton folderId={folderId} folderName={label} />
+        </>
       )}
     </div>
   );
