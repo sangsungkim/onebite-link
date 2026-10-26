@@ -64,3 +64,18 @@ input::placeholder {
 .link-hover:hover {
   text-decoration: underline;
 }
+
+.folder-row:hover .folder-count,
+.folder-row:focus-within .folder-count {
+  opacity: 0;
+}
+
+.folder-row:hover .delete-btn,
+.folder-row:focus-within .delete-btn {
+  opacity: 1;
+}
+
+.delete-btn:hover {
+  background: var(--border);
+  color: var(--error);
+}

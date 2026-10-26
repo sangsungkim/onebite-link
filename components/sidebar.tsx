@@ -23,6 +23,7 @@ export default function Sidebar({
         {folders.map((folder) => (
           <SidebarItem
             key={folder.id}
+            folderId={folder.id}
             label={folder.name}
             count={folder.count}
             href={`/folder/${folder.id}`}
