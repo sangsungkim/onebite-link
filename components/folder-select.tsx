@@ -7,6 +7,7 @@ export default function FolderSelect({ folders }: { folders: Folder[] }) {
       <select
         name="folderId"
         defaultValue=""
+        required
         className="field rounded-[6px] border border-[var(--border)] bg-[var(--card)] px-3 py-2 text-base font-normal text-[var(--text)]"
       >
         <option value="">폴더 선택</option>

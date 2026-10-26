@@ -5,6 +5,7 @@ export type Link = {
   description: string;
   url: string;
   folderId: string;
+  thumbnail?: string;
 };
 
 export const folders: Folder[] = [

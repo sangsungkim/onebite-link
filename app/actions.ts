@@ -1,7 +1,9 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { redirect } from "next/navigation";
 import { folders, links } from "@/lib/mock-data";
+import { fetchOpenGraph } from "@/lib/open-graph";
 
 export async function createFolder(formData: FormData) {
   const name = String(formData.get("name") ?? "").trim();
@@ -9,6 +11,32 @@ export async function createFolder(formData: FormData) {
 
   folders.push({ id: crypto.randomUUID(), name, count: 0 });
   revalidatePath("/", "layout");
+}
+
+export async function createLink(formData: FormData) {
+  const url = String(formData.get("url") ?? "").trim();
+  const folderId = String(formData.get("folderId") ?? "");
+  const folder = folders.find((folder) => folder.id === folderId);
+  if (!url || !folder) return;
+
+  let og;
+  try {
+    og = await fetchOpenGraph(url);
+  } catch {
+    og = { title: url, description: "", thumbnail: "", url };
+  }
+
+  links.push({
+    id: crypto.randomUUID(),
+    title: og.title,
+    description: og.description,
+    url: og.url,
+    thumbnail: og.thumbnail,
+    folderId,
+  });
+  folder.count += 1;
+  revalidatePath("/", "layout");
+  redirect(`/folder/${folderId}`);
 }
 
 export async function updateFolder(id: string, formData: FormData) {
