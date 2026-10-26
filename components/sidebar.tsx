@@ -11,7 +11,7 @@ export default function Sidebar({
   activeFolderId?: string;
 }) {
   return (
-    <aside className="w-56 shrink-0 border-r border-zinc-200 p-3 dark:border-zinc-800">
+    <aside className="w-56 shrink-0 border-r border-[var(--border)] p-3">
       <nav className="flex flex-col gap-1">
         <SidebarItem
           label="All"
@@ -19,7 +19,7 @@ export default function Sidebar({
           href="/"
           active={activeFolderId === undefined}
         />
-        <div className="my-2 border-t border-zinc-200 dark:border-zinc-800" />
+        <div className="my-2 border-t border-[var(--border)]" />
         {folders.map((folder) => (
           <SidebarItem
             key={folder.id}
