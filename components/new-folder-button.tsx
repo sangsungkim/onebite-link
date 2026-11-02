@@ -1,11 +1,13 @@
 "use client";
 
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { createFolder } from "@/app/actions";
 
 export default function NewFolderButton() {
   const dialogRef = useRef<HTMLDialogElement>(null);
   const formRef = useRef<HTMLFormElement>(null);
+  const submittingRef = useRef(false);
+  const [submitting, setSubmitting] = useState(false);
 
   function close() {
     dialogRef.current?.close();
@@ -13,8 +15,16 @@ export default function NewFolderButton() {
   }
 
   async function handleSubmit(formData: FormData) {
-    await createFolder(formData);
-    close();
+    if (submittingRef.current) return;
+    submittingRef.current = true;
+    setSubmitting(true);
+    try {
+      await createFolder(formData);
+      close();
+    } finally {
+      submittingRef.current = false;
+      setSubmitting(false);
+    }
   }
 
   return (
@@ -58,9 +68,10 @@ export default function NewFolderButton() {
             </button>
             <button
               type="submit"
-              className="btn-primary rounded-[6px] px-4 py-2 text-sm text-white"
+              disabled={submitting}
+              className="btn-primary rounded-[6px] px-4 py-2 text-sm text-white disabled:opacity-50"
             >
-              저장
+              {submitting ? "저장 중..." : "저장"}
             </button>
           </div>
         </form>

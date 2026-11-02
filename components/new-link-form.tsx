@@ -1,9 +1,10 @@
 import { createLink } from "@/app/actions";
-import type { Folder } from "@/lib/mock-data";
+import type { FolderOption } from "@/lib/data";
 import FolderSelect from "./folder-select";
 import LinkInput from "./link-input";
+import NewLinkSubmitButton from "./new-link-submit-button";
 
-export default function NewLinkForm({ folders }: { folders: Folder[] }) {
+export default function NewLinkForm({ folders }: { folders: FolderOption[] }) {
   return (
     <form
       action={createLink}
@@ -13,12 +14,7 @@ export default function NewLinkForm({ folders }: { folders: Folder[] }) {
       </h1>
       <LinkInput />
       <FolderSelect folders={folders} />
-      <button
-        type="submit"
-        className="btn-primary self-end rounded-[6px] px-4 py-2 text-sm text-white"
-      >
-        저장
-      </button>
+      <NewLinkSubmitButton />
     </form>
   );
 }

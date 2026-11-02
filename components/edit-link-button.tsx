@@ -2,7 +2,8 @@
 
 import { useRef } from "react";
 import { updateLink } from "@/app/actions";
-import type { Folder, Link } from "@/lib/mock-data";
+import type { FolderOption } from "@/lib/data";
+import type { Link } from "@/lib/mock-data";
 
 const fieldClass =
   "field rounded-[6px] border border-[var(--border)] bg-[var(--card)] px-3 py-2 text-base font-normal text-[var(--text)]";
@@ -12,7 +13,7 @@ export default function EditLinkButton({
   folders,
 }: {
   link: Link;
-  folders: Folder[];
+  folders: FolderOption[];
 }) {
   const dialogRef = useRef<HTMLDialogElement>(null);
   const formRef = useRef<HTMLFormElement>(null);

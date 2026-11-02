@@ -1,6 +1,6 @@
-import type { Folder } from "@/lib/mock-data";
+import type { FolderOption } from "@/lib/data";
 
-export default function FolderSelect({ folders }: { folders: Folder[] }) {
+export default function FolderSelect({ folders }: { folders: FolderOption[] }) {
   return (
     <label className="flex flex-col gap-1.5 text-sm font-medium text-[var(--text)]">
       폴더

@@ -1,4 +1,5 @@
-import type { Folder, Link } from "@/lib/mock-data";
+import type { FolderOption } from "@/lib/data";
+import type { Link } from "@/lib/mock-data";
 import DeleteLinkButton from "./delete-link-button";
 import EditLinkButton from "./edit-link-button";
 
@@ -7,7 +8,7 @@ export default function LinkCard({
   folders,
 }: {
   link: Link;
-  folders: Folder[];
+  folders: FolderOption[];
 }) {
   return (
     <div className="group/card relative">

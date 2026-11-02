@@ -1,23 +1,26 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
-import { folders, links } from "@/lib/mock-data";
 import { fetchOpenGraph } from "@/lib/open-graph";
+import { createClient } from "@/utils/supabase/server";
 
 export async function createFolder(formData: FormData) {
   const name = String(formData.get("name") ?? "").trim();
   if (!name) return;
 
-  folders.push({ id: crypto.randomUUID(), name, count: 0 });
+  const supabase = createClient(await cookies());
+  const { error } = await supabase.from("folders").insert({ name });
+  if (error) throw new Error(error.message);
+
   revalidatePath("/", "layout");
 }
 
 export async function createLink(formData: FormData) {
   const url = String(formData.get("url") ?? "").trim();
   const folderId = String(formData.get("folderId") ?? "");
-  const folder = folders.find((folder) => folder.id === folderId);
-  if (!url || !folder) return;
+  if (!url || !/^\d+$/.test(folderId)) return;
 
   let og;
   try {
@@ -26,45 +29,47 @@ export async function createLink(formData: FormData) {
     og = { title: url, description: "", thumbnail: "", url };
   }
 
-  links.push({
-    id: crypto.randomUUID(),
-    title: og.title,
-    description: og.description,
+  const supabase = createClient(await cookies());
+  const { error } = await supabase.from("links").insert({
     url: og.url,
-    thumbnail: og.thumbnail,
-    folderId,
+    title: og.title,
+    description: og.description || null,
+    thumbnail_url: og.thumbnail || null,
+    folder_id: folderId,
   });
-  folder.count += 1;
+  if (error) throw new Error(error.message);
+
   revalidatePath("/", "layout");
   redirect(`/folder/${folderId}`);
 }
 
 export async function updateLink(id: string, formData: FormData) {
-  const link = links.find((link) => link.id === id);
   const title = String(formData.get("title") ?? "").trim();
   const description = String(formData.get("description") ?? "").trim();
   const folderId = String(formData.get("folderId") ?? "");
-  const nextFolder = folders.find((folder) => folder.id === folderId);
-  if (!link || !title || !nextFolder) return;
+  if (!title || !/^\d+$/.test(id) || !/^\d+$/.test(folderId)) return;
 
-  if (link.folderId !== folderId) {
-    const prevFolder = folders.find((folder) => folder.id === link.folderId);
-    if (prevFolder) prevFolder.count = Math.max(0, prevFolder.count - 1);
-    nextFolder.count += 1;
-    link.folderId = folderId;
-  }
-  link.title = title;
-  link.description = description;
+  const supabase = createClient(await cookies());
+  const { error } = await supabase
+    .from("links")
+    .update({
+      title,
+      description: description || null,
+      folder_id: folderId,
+    })
+    .eq("id", id);
+  if (error) throw new Error(error.message);
+
   revalidatePath("/", "layout");
 }
 
 export async function deleteLink(id: string) {
-  const index = links.findIndex((link) => link.id === id);
-  if (index === -1) return;
+  if (!/^\d+$/.test(id)) return;
 
-  const [link] = links.splice(index, 1);
-  const folder = folders.find((folder) => folder.id === link.folderId);
-  if (folder) folder.count = Math.max(0, folder.count - 1);
+  const supabase = createClient(await cookies());
+  const { error } = await supabase.from("links").delete().eq("id", id);
+  if (error) throw new Error(error.message);
+
   revalidatePath("/", "layout");
 }
 
@@ -72,20 +77,20 @@ export async function updateFolder(id: string, formData: FormData) {
   const name = String(formData.get("name") ?? "").trim();
   if (!name) return;
 
-  const folder = folders.find((folder) => folder.id === id);
-  if (!folder) return;
+  const supabase = createClient(await cookies());
+  const { error } = await supabase
+    .from("folders")
+    .update({ name })
+    .eq("id", id);
+  if (error) throw new Error(error.message);
 
-  folder.name = name;
   revalidatePath("/", "layout");
 }
 
 export async function deleteFolder(id: string) {
-  const index = folders.findIndex((folder) => folder.id === id);
-  if (index === -1) return;
+  const supabase = createClient(await cookies());
+  const { error } = await supabase.from("folders").delete().eq("id", id);
+  if (error) throw new Error(error.message);
 
-  folders.splice(index, 1);
-  for (let i = links.length - 1; i >= 0; i--) {
-    if (links[i].folderId === id) links.splice(i, 1);
-  }
   revalidatePath("/", "layout");
 }

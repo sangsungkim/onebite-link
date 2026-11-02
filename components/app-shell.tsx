@@ -1,4 +1,3 @@
-import { folders, links } from "@/lib/mock-data";
 import Header from "./header";
 import Sidebar from "./sidebar";
 
@@ -13,11 +12,7 @@ export default function AppShell({
     <div className="flex h-screen flex-col">
       <Header />
       <div className="flex min-h-0 flex-1">
-        <Sidebar
-          folders={folders}
-          totalCount={links.length}
-          activeFolderId={activeFolderId}
-        />
+        <Sidebar activeFolderId={activeFolderId} />
         {children}
       </div>
     </div>
