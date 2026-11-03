@@ -31,3 +31,13 @@ export const createRequestClient = async () => {
   await connection();
   return createClient(await cookies());
 };
+
+// 현재 로그인된 사용자의 ID와 함께 클라이언트를 반환한다.
+// 조회 쿼리에서 user_id로 필터링할 때 사용한다.
+export const createUserClient = async () => {
+  const supabase = await createRequestClient();
+  const { data } = await supabase.auth.getClaims();
+  const userId = data?.claims.sub;
+  if (!userId) throw new Error("로그인이 필요합니다.");
+  return { supabase, userId };
+};

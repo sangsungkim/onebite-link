@@ -1,13 +1,14 @@
-import { createRequestClient } from "@/utils/supabase/server";
+import { createUserClient } from "@/utils/supabase/server";
 import type { Link } from "./mock-data";
 
 export type FolderOption = { id: string; name: string };
 
 export async function getFolders(): Promise<FolderOption[]> {
-  const supabase = await createRequestClient();
+  const { supabase, userId } = await createUserClient();
   const { data, error } = await supabase
     .from("folders")
     .select("id, name")
+    .eq("user_id", userId)
     .order("created_at", { ascending: true })
     .order("id", { ascending: true });
   if (error) throw new Error(error.message);
@@ -16,10 +17,11 @@ export async function getFolders(): Promise<FolderOption[]> {
 }
 
 export async function getLinks(folderId?: string): Promise<Link[]> {
-  const supabase = await createRequestClient();
+  const { supabase, userId } = await createUserClient();
   let query = supabase
     .from("links")
     .select("id, url, title, description, thumbnail_url, folder_id")
+    .eq("user_id", userId)
     .order("created_at", { ascending: false })
     .order("id", { ascending: false });
   if (folderId !== undefined) query = query.eq("folder_id", folderId);

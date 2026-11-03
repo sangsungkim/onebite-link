@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import AppShell from "@/components/app-shell";
 import LinkGrid from "@/components/link-grid";
 import { getFolders, getLinks } from "@/lib/data";
-import { createRequestClient } from "@/utils/supabase/server";
+import { createUserClient } from "@/utils/supabase/server";
 
 export default function FolderPage({ params }: PageProps<"/folder/[id]">) {
   return (
@@ -27,11 +27,12 @@ async function FolderContent({
   const { id } = await params;
   if (!/^\d+$/.test(id)) notFound();
 
-  const supabase = await createRequestClient();
+  const { supabase, userId } = await createUserClient();
   const { data: folder, error } = await supabase
     .from("folders")
     .select("id")
     .eq("id", id)
+    .eq("user_id", userId)
     .maybeSingle();
   if (error) throw new Error(error.message);
   if (!folder) notFound();

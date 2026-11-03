@@ -1,17 +1,18 @@
 import { Suspense } from "react";
 import { signOut } from "@/app/actions";
-import { createRequestClient } from "@/utils/supabase/server";
+import { createUserClient } from "@/utils/supabase/server";
 import SidebarItem from "./sidebar-item";
 
 async function SidebarItems({ activeFolderId }: { activeFolderId?: string }) {
-  const supabase = await createRequestClient();
+  const { supabase, userId } = await createUserClient();
   const [foldersResult, linksResult] = await Promise.all([
     supabase
       .from("folders")
       .select("id, name")
+      .eq("user_id", userId)
       .order("created_at", { ascending: true })
       .order("id", { ascending: true }),
-    supabase.from("links").select("folder_id"),
+    supabase.from("links").select("folder_id").eq("user_id", userId),
   ]);
   if (foldersResult.error) throw new Error(foldersResult.error.message);
   if (linksResult.error) throw new Error(linksResult.error.message);
