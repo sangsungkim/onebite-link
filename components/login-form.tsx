@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useCallback, useState } from "react";
 import { createClient } from "@/utils/supabase/client";
@@ -38,6 +39,19 @@ export default function LoginForm() {
   const closeToast = useCallback(() => setError(null), []);
 
   const canSubmit = email.trim() !== "" && password !== "" && !pending;
+
+  async function handleKakaoLogin() {
+    if (pending) return;
+    setPending(true);
+    const { error } = await createClient().auth.signInWithOAuth({
+      provider: "kakao",
+      options: { redirectTo: `${window.location.origin}/auth/callback?next=/` },
+    });
+    if (error) {
+      setPending(false);
+      setError("카카오 로그인에 실패했습니다. 잠시 후 다시 시도해 주세요.");
+    }
+  }
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -92,6 +106,21 @@ export default function LoginForm() {
           className="btn-primary rounded-[6px] px-4 py-2 text-sm font-medium text-white disabled:cursor-not-allowed disabled:opacity-40"
         >
           로그인
+        </button>
+        <button
+          type="button"
+          onClick={handleKakaoLogin}
+          disabled={pending}
+          aria-label="카카오 로그인"
+          className="block w-full disabled:cursor-not-allowed disabled:opacity-40"
+        >
+          <Image
+            src="/kakao_login_large_wide.png"
+            alt="카카오 로그인"
+            width={600}
+            height={90}
+            className="h-auto w-full"
+          />
         </button>
       </form>
     </>
