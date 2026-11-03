@@ -1,10 +1,9 @@
 import { Suspense } from "react";
-import { cookies } from "next/headers";
-import { createClient } from "@/utils/supabase/server";
+import { createRequestClient } from "@/utils/supabase/server";
 import SidebarItem from "./sidebar-item";
 
 async function SidebarItems({ activeFolderId }: { activeFolderId?: string }) {
-  const supabase = createClient(await cookies());
+  const supabase = await createRequestClient();
   const [foldersResult, linksResult] = await Promise.all([
     supabase
       .from("folders")

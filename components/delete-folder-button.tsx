@@ -1,7 +1,6 @@
 "use client";
 
 import { useRef } from "react";
-import { useRouter } from "next/navigation";
 import { deleteFolder } from "@/app/actions";
 
 export default function DeleteFolderButton({
@@ -12,12 +11,13 @@ export default function DeleteFolderButton({
   folderName: string;
 }) {
   const dialogRef = useRef<HTMLDialogElement>(null);
-  const router = useRouter();
 
   async function handleDelete() {
-    await deleteFolder(folderId);
+    // 모달을 먼저 닫아 top layer(배경 backdrop)를 해제한 뒤 삭제한다.
     dialogRef.current?.close();
-    if (window.location.pathname === `/folder/${folderId}`) router.push("/");
+    // 현재 보고 있는 폴더를 지우면 서버에서 홈으로 리다이렉트한다.
+    const onDeletedFolder = window.location.pathname === `/folder/${folderId}`;
+    await deleteFolder(folderId, onDeletedFolder);
   }
 
   return (

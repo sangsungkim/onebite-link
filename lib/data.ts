@@ -1,11 +1,10 @@
-import { cookies } from "next/headers";
-import { createClient } from "@/utils/supabase/server";
+import { createRequestClient } from "@/utils/supabase/server";
 import type { Link } from "./mock-data";
 
 export type FolderOption = { id: string; name: string };
 
 export async function getFolders(): Promise<FolderOption[]> {
-  const supabase = createClient(await cookies());
+  const supabase = await createRequestClient();
   const { data, error } = await supabase
     .from("folders")
     .select("id, name")
@@ -17,7 +16,7 @@ export async function getFolders(): Promise<FolderOption[]> {
 }
 
 export async function getLinks(folderId?: string): Promise<Link[]> {
-  const supabase = createClient(await cookies());
+  const supabase = await createRequestClient();
   let query = supabase
     .from("links")
     .select("id, url, title, description, thumbnail_url, folder_id")

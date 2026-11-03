@@ -87,10 +87,11 @@ export async function updateFolder(id: string, formData: FormData) {
   revalidatePath("/", "layout");
 }
 
-export async function deleteFolder(id: string) {
+export async function deleteFolder(id: string, redirectHome = false) {
   const supabase = createClient(await cookies());
   const { error } = await supabase.from("folders").delete().eq("id", id);
   if (error) throw new Error(error.message);
 
   revalidatePath("/", "layout");
+  if (redirectHome) redirect("/");
 }

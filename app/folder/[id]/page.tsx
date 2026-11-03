@@ -1,10 +1,9 @@
 import { Suspense } from "react";
-import { cookies } from "next/headers";
 import { notFound } from "next/navigation";
 import AppShell from "@/components/app-shell";
 import LinkGrid from "@/components/link-grid";
 import { getFolders, getLinks } from "@/lib/data";
-import { createClient } from "@/utils/supabase/server";
+import { createRequestClient } from "@/utils/supabase/server";
 
 export default function FolderPage({ params }: PageProps<"/folder/[id]">) {
   return (
@@ -28,7 +27,7 @@ async function FolderContent({
   const { id } = await params;
   if (!/^\d+$/.test(id)) notFound();
 
-  const supabase = createClient(await cookies());
+  const supabase = await createRequestClient();
   const { data: folder, error } = await supabase
     .from("folders")
     .select("id")
