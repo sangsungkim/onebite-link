@@ -1,4 +1,5 @@
 import { Suspense } from "react";
+import { signOut } from "@/app/actions";
 import { createRequestClient } from "@/utils/supabase/server";
 import SidebarItem from "./sidebar-item";
 
@@ -50,12 +51,20 @@ export default function Sidebar({
   activeFolderId?: string;
 }) {
   return (
-    <aside className="w-56 shrink-0 border-r border-[var(--border)] p-3">
-      <nav className="flex flex-col gap-1">
+    <aside className="flex w-56 shrink-0 flex-col border-r border-[var(--border)] p-3">
+      <nav className="flex flex-1 flex-col gap-1 overflow-y-auto">
         <Suspense fallback={null}>
           <SidebarItems activeFolderId={activeFolderId} />
         </Suspense>
       </nav>
+      <form action={signOut} className="mt-2 border-t border-[var(--border)] pt-2">
+        <button
+          type="submit"
+          className="item-hover w-full rounded-[6px] px-3 py-2 text-left text-sm text-[var(--text-sub)]"
+        >
+          로그아웃
+        </button>
+      </form>
     </aside>
   );
 }

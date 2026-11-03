@@ -95,3 +95,10 @@ export async function deleteFolder(id: string, redirectHome = false) {
   revalidatePath("/", "layout");
   if (redirectHome) redirect("/");
 }
+
+export async function signOut() {
+  const supabase = createClient(await cookies());
+  await supabase.auth.signOut();
+
+  redirect("/login");
+}
