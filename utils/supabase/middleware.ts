@@ -32,7 +32,10 @@ export const createClient = async (request: NextRequest) => {
   // 로그인하지 않은 사용자는 보호된 페이지에 접근할 수 없다.
   const { pathname } = request.nextUrl;
   const isProtected =
-    pathname === "/" || pathname === "/new" || pathname.startsWith("/folder/");
+    pathname === "/" ||
+    pathname === "/new" ||
+    pathname === "/reset-password" ||
+    pathname.startsWith("/folder/");
 
   if (isProtected && !data?.claims) {
     const redirectResponse = NextResponse.redirect(

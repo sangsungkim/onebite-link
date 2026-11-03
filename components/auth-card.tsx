@@ -13,6 +13,7 @@ export default function AuthCard({
   fields = [],
   submitLabel = "",
   children,
+  aboveFooter,
   footerText,
   footerLinkLabel,
   footerHref,
@@ -20,6 +21,7 @@ export default function AuthCard({
   fields?: Field[];
   submitLabel?: string;
   children?: React.ReactNode;
+  aboveFooter?: React.ReactNode;
   footerText: string;
   footerLinkLabel: string;
   footerHref: string;
@@ -56,15 +58,18 @@ export default function AuthCard({
           </button>
         </form>
         )}
-        <p className="text-center text-sm text-[var(--text-sub)]">
-          {footerText}{" "}
-          <Link
-            href={footerHref}
-            className="link-hover text-[var(--accent-text)]"
-          >
-            {footerLinkLabel}
-          </Link>
-        </p>
+        <div className="-mt-4 flex flex-col gap-3">
+          {aboveFooter}
+          <p className="text-center text-sm text-[var(--text-sub)]">
+            {footerText}{" "}
+            <Link
+              href={footerHref}
+              className="link-hover text-[var(--accent-text)]"
+            >
+              {footerLinkLabel}
+            </Link>
+          </p>
+        </div>
       </div>
     </main>
   );
