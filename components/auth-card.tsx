@@ -10,14 +10,16 @@ type Field = {
 };
 
 export default function AuthCard({
-  fields,
-  submitLabel,
+  fields = [],
+  submitLabel = "",
+  children,
   footerText,
   footerLinkLabel,
   footerHref,
 }: {
-  fields: Field[];
-  submitLabel: string;
+  fields?: Field[];
+  submitLabel?: string;
+  children?: React.ReactNode;
   footerText: string;
   footerLinkLabel: string;
   footerHref: string;
@@ -28,6 +30,7 @@ export default function AuthCard({
         <div className="text-center text-2xl">
           <Logo />
         </div>
+        {children ?? (
         <form className="flex flex-col gap-4">
           {fields.map((f) => (
             <label
@@ -52,6 +55,7 @@ export default function AuthCard({
             {submitLabel}
           </button>
         </form>
+        )}
         <p className="text-center text-sm text-[var(--text-sub)]">
           {footerText}{" "}
           <Link
