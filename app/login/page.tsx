@@ -1,6 +1,14 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import AuthCard from "@/components/auth-card";
 import LoginForm from "@/components/login-form";
+
+export const metadata: Metadata = {
+  title: "로그인",
+  description: "한입 링크에 로그인하고 북마크를 관리하세요.",
+  openGraph: { title: "로그인 | 한입 링크" },
+  twitter: { title: "로그인 | 한입 링크" },
+};
 
 export default function LoginPage() {
   return (
