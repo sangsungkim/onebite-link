@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { Suspense } from "react";
 import { signOut } from "@/app/actions";
 import { createUserClient } from "@/utils/supabase/server";
@@ -66,6 +67,12 @@ export default function Sidebar({
           로그아웃
         </button>
       </form>
+      <Link
+        href="/privacy"
+        className="item-hover rounded-[6px] px-3 py-2 text-sm text-[var(--text-sub)]"
+      >
+        개인정보 처리방침
+      </Link>
     </aside>
   );
 }
