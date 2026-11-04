@@ -2,13 +2,12 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import AuthCard from "@/components/auth-card";
 import SignupForm from "@/components/signup-form";
+import { createMetadata } from "@/lib/metadata";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = createMetadata({
   title: "회원가입",
   description: "한입 링크에 가입하고 북마크를 모아보세요.",
-  openGraph: { title: "회원가입 | 한입 링크" },
-  twitter: { title: "회원가입 | 한입 링크" },
-};
+});
 
 export default function SignupPage() {
   return (

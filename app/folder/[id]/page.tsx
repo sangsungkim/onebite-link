@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import AppShell from "@/components/app-shell";
 import LinkGrid from "@/components/link-grid";
 import { getFolders, getLinks } from "@/lib/data";
+import { createMetadata } from "@/lib/metadata";
 import { createUserClient } from "@/utils/supabase/server";
 
 export async function generateMetadata({
@@ -25,12 +26,7 @@ export async function generateMetadata({
   } catch {
     // 인증 실패 등은 페이지 본문에서 처리하므로 기본 제목 사용
   }
-  const title = `${name} | 한입 링크`;
-  return {
-    title: name,
-    openGraph: { title },
-    twitter: { title },
-  };
+  return createMetadata({ title: name });
 }
 
 export default function FolderPage({ params }: PageProps<"/folder/[id]">) {

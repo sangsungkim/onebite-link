@@ -1,12 +1,13 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { createMetadata } from "@/lib/metadata";
 
 export const metadata: Metadata = {
-  title: "개인정보 처리방침",
-  description: "한입 링크의 개인정보 처리방침 안내 페이지입니다.",
+  ...createMetadata({
+    title: "개인정보 처리방침",
+    description: "한입 링크의 개인정보 처리방침 안내 페이지입니다.",
+  }),
   robots: { index: true, follow: true },
-  openGraph: { title: "개인정보 처리방침 | 한입 링크" },
-  twitter: { title: "개인정보 처리방침 | 한입 링크" },
 };
 
 const SERVICE_NAME = "한입 링크";

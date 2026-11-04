@@ -2,13 +2,12 @@ import type { Metadata } from "next";
 import { Suspense } from "react";
 import AuthCard from "@/components/auth-card";
 import ForgotPasswordForm from "@/components/forgot-password-form";
+import { createMetadata } from "@/lib/metadata";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = createMetadata({
   title: "비밀번호 찾기",
   description: "가입한 이메일로 비밀번호 재설정 링크를 받아보세요.",
-  openGraph: { title: "비밀번호 찾기 | 한입 링크" },
-  twitter: { title: "비밀번호 찾기 | 한입 링크" },
-};
+});
 
 export default function ForgotPasswordPage({
   searchParams,
